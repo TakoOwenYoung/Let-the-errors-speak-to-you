@@ -160,13 +160,13 @@ public class PlatformPanel extends JPanel
                   {
                      mushi.jump();
                   if(count%20==0)
-                     mushi.down();
+                     mushi.down(1);
                   }
                      
             }
             if(down&&mushi.canMove(goaY)[3])
             {
-             mushi.down();  
+             mushi.down(1);  
             }
             if(left&&mushi.canMove(goaY)[0] )
             {
