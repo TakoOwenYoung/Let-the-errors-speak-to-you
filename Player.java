@@ -23,6 +23,7 @@ public class Player extends GameObject
       
    }//Player()
    
+   //Moves player object 
    public void left()
    {
        xCtr--;
@@ -38,13 +39,19 @@ public class Player extends GameObject
       yCtr--;
    }
    
-      public void dowwn()
-   {
-      yCtr--;
-   }   
+   //public void down()
+   //{
+     // yCtr++;
+  // }   
 
    
-      public void down( int c)
+      public void down(int n)
+   {
+      yCtr=yCtr+n;
+   }   
+
+   //Gravity method
+      public void gravity( int c)
    {
       
       int gravity=0;
@@ -53,9 +60,8 @@ public class Player extends GameObject
          if(c%20==0)
         {
             gravity++;
-            yCtr+=gravity;
         }
-         
+         yCtr+=gravity;
          System.out.println("Gravity is "+gravity);
       //}
       if(gravity>7)
@@ -331,7 +337,7 @@ return temp;
                this.getLeft()<current.getRight())
                {
                collidesOnUp=true;
-               System.out.println("can move up is  "+this.collidesVictory(goaY,vb));
+               //System.out.println("can move up is  "+this.collidesVictory(goaY,vb));
 
                }
               
@@ -352,7 +358,7 @@ return temp;
       
                {
                   collidesOnDown=true;
-                             System.out.println("can move down is  "+this.collidesVictory(goaY, vb));
+                             //System.out.println("can move down is  "+this.collidesVictory(goaY, vb));
 
                }
               

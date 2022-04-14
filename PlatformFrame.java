@@ -10,42 +10,7 @@ import java.io.*;
 public class PlatformFrame extends JFrame
 {                                                                                                                        //PlatformFrame class
 int count=0;
-int gravity=0; if(c%20==0)
-        {
-            gravity++;
-            yCtr+=gravity;
-        }
-         
-         System.out.println("Gravity is "+gravity);
-      //}
-      if(gravity>7)
-      {
-         gravity=7;
-      }
- if(c%20==0)
-        {
-            gravity++;
-            yCtr+=gravity;
-        }
-         
-         System.out.println("Gravity is "+gravity);
-      //}
-      if(gravity>7)
-      {
-         gravity=7;
-      }
- if(c%20==0)
-        {
-            gravity++;
-            yCtr+=gravity;
-        }
-         
-         System.out.println("Gravity is "+gravity);
-      //}
-      if(gravity>7)
-      {
-         gravity=7;
-      }
+
 
    public static ArrayList<ArrayList<GameObject>> staticGoaY;                                                                               
    Container contents;
@@ -53,9 +18,9 @@ int gravity=0; if(c%20==0)
    Player mushi;
    int jump=0;
    int grav=1;
-
+   boolean resetGravity=false;
    boolean canJump=false;
-   int jumpNow;
+   int jumpSpeed;
    VictoryBlock target;
    ArrayList<ArrayList<GameObject>> goaY=new ArrayList<ArrayList<GameObject>>();
    
@@ -163,66 +128,72 @@ public class PlatformPanel extends JPanel
    
  
   
-   
+   int n=0;
      
    
    public class TimeListenerB implements ActionListener
    {  
       
-            int n;
+          
       
         
       public void actionPerformed(ActionEvent e)
       {  
        count++;
-                             
+                        
 
-         //try
-         //{
-            if(canJump)
+         
+            if(canJump)  
+            if(up&&mushi.canMove(goaY)[2])
             {              
+                  n=0;         
                   if(count%10==0)
                    {
                      if(jump<7)
-                     jumpNow++;
+                     jumpSpeed++;
                    }
                   for(int i=0; i<jump; i++)
                   {
                   if(mushi.canMove(goaY)[2])
                      {
                      mushi.up();
-                     jump=7-jumpNow;
+                     jump=7-jumpSpeed;
                      }
                      else
                      {
                         jump=0;
-                        
                      }
                      if(jump==0)
                      {canJump=false;}
                   }
-                  if(jump==0)
-                  {up=false;}
-                  
-
-                     
+                   
+                    
             }
+            
             
             if(mushi.canMove(goaY)[3])
             {
               
+              mushi.down(n);
+              
+              
+              if(count%20==0&&n<7)
+               {
+                  
+                  n++;
+                  System.out.println("n is "+n);
+               }
             
-            
-            
-            
+            /*
             // if(count%20==0&&grav<7)
                  //{grav+=1;}
                  //for(int i=0; i<grav; i++)
                   //{
                      //if(mushi.canMove(goaY)[3])
                      //mushi.dowwn();
-                    //mushi.down(count);
+                    //mushi.gravity(count);
                   //}
+                  */
             }
             
             if(left&&mushi.canMove(goaY)[0] )
@@ -308,7 +279,7 @@ public class PlatformPanel extends JPanel
          up=true;
          canJump = true;
          jump=7;
-         jumpNow=0;
+         jumpSpeed=0;
          }
       }
       if(e.getKeyCode() == KeyEvent.VK_S)
