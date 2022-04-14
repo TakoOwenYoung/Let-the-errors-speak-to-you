@@ -1,6 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.*;
 
 public class GameObject 
 {//GameObject
@@ -91,9 +92,18 @@ public class GameObject
    public int getRight()
    {return xCtr+13;}
    ////////////////////////////////////////TWO METHODS
-   
-   public boolean collides(GameObject go)
+   boolean hit=false;
+   public boolean collides(ArrayList<ArrayList<GameObject>> goaY)
    {//collides
+      
+      for(int j=0; j<goaY.size(); j++)
+      {
+      for(int i=0; i<goaY.get(j).size(); i++)
+      {
+      
+      GameObject go=goaY.get(j).get(i); 
+      if(go!=null)
+      {
       int topthis=this.getY()-12;
       int bottomthis=this.getY()+13;
       int leftthis=this.getX()-12;
@@ -103,14 +113,32 @@ public class GameObject
       int leftother=go.getX()-12;
       int rightother=go.getY()+13;
       
-      if(Math.abs(this.getX()-go.getX())>2 || Math.abs(this.getY()-go.getY())>2) //Instructed to include this line but don't know why. 4/9/2022 11:07a
-      {
-         return false;
-      }
-      else
-      {                                                        
-         return true;// (!(bottomthis<topother)||(topthis>bottomother)||(leftthis>rightother)||(rightthis<leftother));
-      }
+           
+            if(this.getX()==go.getX()&& this.getY()==go.getY()) //Instructed to include this line but don't know why. 4/9/2022 11:07a
+            {
+               hit=false;
+            }
+            else if((bottomthis==topother)&&(topthis<bottomother)&&(leftthis<rightother)&&(rightthis>leftother)) //If sitting on top
+            {                                                        
+               hit=true;
+            }
+            else if((bottomthis>topother)&&(topthis==bottomother)&&(leftthis<rightother)&&(rightthis>leftother)) //If touching bottom
+            {                                                        
+               hit=true;
+            }
+            else if((bottomthis>topother)&&(topthis<bottomother)&&(leftthis==rightother)&&(rightthis>leftother)) //If touching on right
+            {                                                        
+               hit=true;
+            }
+            else if((bottomthis>topother)&&(topthis<bottomother)&&(leftthis<rightother)&&(rightthis==leftother)) //If touching on left
+            {                                                        
+               hit=true;
+            }
+            }//if not null end
+         }//end inner i loop
+      }//end outer j loop
+   return hit;
+   
    }//collides
    
    public boolean collidesOnTop(GameObject go)

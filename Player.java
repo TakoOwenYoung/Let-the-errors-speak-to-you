@@ -9,7 +9,7 @@ public class Player extends GameObject
    public boolean floor=false;
    public Player(int x,int y,Color c)
    {//Player()
-      super(); //HOW DO I SIMPLIFY THIS? 4/9/2022 11:41a
+      super(); //Ensure the player block is instantiated within the right range       
       if(x<12)
       xCtr=12;
       else
@@ -23,17 +23,17 @@ public class Player extends GameObject
       
    }//Player()
    
-   //Moves player object 
+   //Moves player object left
    public void left()
    {
        xCtr--;
    }
-   
+   //Moves player object right
       public void right()
    {
       xCtr++;
    }
-   
+   //Moves player object up
       public void up()
    {
       yCtr--;
@@ -44,13 +44,14 @@ public class Player extends GameObject
      // yCtr++;
   // }   
 
-   
-      public void down(int n)
+      
+      public void down(int n, ArrayList<ArrayList<GameObject>> goaY)
    {
+      if(!this.collides(goaY))
       yCtr=yCtr+n;
    }   
 
-   //Gravity method
+   /*Gravity method
       public void gravity( int c)
    {
       
@@ -69,6 +70,7 @@ public class Player extends GameObject
          gravity=7;
       }
    }   
+   */
    
       public void jump()
    {
@@ -214,12 +216,13 @@ public class Player extends GameObject
             current =goaY.get(j).get(i);
             if(current!=null)
             {
-               if(Math.abs(this.getBottom()-current.getTop())<1 &&
+               if(this.getBottom()==current.getTop() &&
                this.getLeft()<current.getRight() &&
                this.getRight()>current.getLeft())
       
                {
                   canMoveDown=false;
+                  floor=true;
                              //System.out.println("can move down is  "+this.canMove(goaY)[3]);
 
                }
@@ -229,7 +232,7 @@ public class Player extends GameObject
       }//Outer J loop
     
     
-    //canMoveDown=mushi.isOnGround(goaY);
+    //canMoveDown=actionSquare.isOnGround(goaY);
       return new boolean[]  {canMoveLeft,canMoveRight, canMoveUp,canMoveDown};
    
    
@@ -237,13 +240,13 @@ public class Player extends GameObject
    
       
 
-   public boolean collides(ArrayList<ArrayList<GameObject>> goaY) //Backup Parameter phrase--> //ArrayList<? extends ArrayList<?>>goaX 
+   /*public boolean collides(ArrayList<ArrayList<GameObject>> goaY)
    {//collides
       boolean temp=false;
       GameObject current;
       for(int j=0; j<goaY.size(); j++)
       {//Outer J loop
-         for(int i=0; i<goaY.get(i).size(); i++)
+         for(int i=0; i<goaY.get(j).size(); i++)
          {
             current=goaY.get(j).get(i);
             if(goaY.get(j).get(i)!=null)
@@ -260,7 +263,8 @@ public class Player extends GameObject
 return temp;
       
    }//collides
-   
+   */
+   //This method determines if the player block collides with a victory block object 
    public boolean collidesVictory(ArrayList<ArrayList<GameObject>> goaY,VictoryBlock vb) //Backup Parameter phrase--> //ArrayList<? extends ArrayList<?>>goaX 
    {//collidesV
       
@@ -304,11 +308,11 @@ return temp;
          for(int i=0; i<goaY.get(j).size(); i++)
          {
             current =goaY.get(j).get(i);
-            if(current!=null&&current instanceof VictoryBlock)
+            if(current!=null&&current instanceof VictoryBlock)//Check to see if the current game object is not NULL and see if it's a victory block  
             {
-               if(this.getBottom()>current.getTop() &&
-               this.getTop()<current.getBottom() &&
-               this.getRight()==current.getLeft())
+               if(this.getBottom()>current.getTop() && //If the bottom of the player is greater , meaning lower, than the top of a game object then return true 
+               this.getTop()<current.getBottom() && //If the top of the player object is higher then the bottom of the gameobject return true 
+               this.getRight()==current.getLeft()) //If the right side of my player is equal to the left side of the current game object block then return true 
       
                {
                   collidesOnRight=true;
@@ -367,7 +371,7 @@ return temp;
       }//Outer J loop
     
     
-    //collidesOnDown=mushi.isOnGround(goaY);
+    //collidesOnDown=actionSquare.isOnGround(goaY);
       return  (collidesOnLeft||collidesOnRight||collidesOnUp||collidesOnDown);
    
       

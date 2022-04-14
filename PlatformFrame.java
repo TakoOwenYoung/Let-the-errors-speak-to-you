@@ -15,7 +15,7 @@ int count=0;
    public static ArrayList<ArrayList<GameObject>> staticGoaY;                                                                               
    Container contents;
    PlatformPanel pp;
-   Player mushi;
+   Player actionSquare;
    int jump=0;
    int grav=1;
    boolean resetGravity=false;
@@ -89,12 +89,11 @@ public class PlatformPanel extends JPanel
             }
             
             staticGoaY=goaY;
-            mushi=new Player(startBlockX,startBlockY,new Color(0,153,0));
+            actionSquare=new Player(startBlockX,startBlockY,new Color(0,153,0));
             
             t.start();
             
-            
-            
+   
             }
                                                                                                   //try
          catch(IndexOutOfBoundsException ioobe)
@@ -126,37 +125,30 @@ public class PlatformPanel extends JPanel
    boolean left;
    boolean right;
    
- 
-  
    int n=0;
      
    
    public class TimeListenerB implements ActionListener
-   {  
-      
-          
-      
-        
+   {  //Timelistener
+ 
       public void actionPerformed(ActionEvent e)
       {  
        count++;
-                        
-
-         
             if(canJump)  
-            if(up&&mushi.canMove(goaY)[2])
+            if(up&&actionSquare.canMove(goaY)[2])
             {              
-                  n=0;         
-                  if(count%10==0)
+                  n=0; 
+                  //resetGravity=true;        
+                  if(count%20==0)
                    {
                      if(jump<7)
                      jumpSpeed++;
                    }
                   for(int i=0; i<jump; i++)
                   {
-                  if(mushi.canMove(goaY)[2])
+                  if(actionSquare.canMove(goaY)[2])
                      {
-                     mushi.up();
+                     actionSquare.up();
                      jump=7-jumpSpeed;
                      }
                      else
@@ -165,57 +157,49 @@ public class PlatformPanel extends JPanel
                      }
                      if(jump==0)
                      {canJump=false;}
-                  }
-                   
-                    
+                  }      
             }
             
             
-            if(mushi.canMove(goaY)[3])
+            if(actionSquare.canMove(goaY)[3])
             {
-              
-              mushi.down(n);
+              if(actionSquare.canMove(goaY)[0]&&actionSquare.canMove(goaY)[1]&&actionSquare.canMove(goaY)[2]&&actionSquare.canMove(goaY)[3])
+              {
+              actionSquare.down(n,goaY);
               
               
               if(count%20==0&&n<7)
                {
-                  
                   n++;
                   System.out.println("n is "+n);
+                  System.out.println("TIMER actionSquare collides is "+actionSquare.collides(goaY));
                }
+             }
+        
             
-            /*
-            // if(count%20==0&&grav<7)
-                 //{grav+=1;}
-                 //for(int i=0; i<grav; i++)
-                  //{
-                     //if(mushi.canMove(goaY)[3])
-                     //mushi.dowwn();
-                    //mushi.gravity(count);
-                  //}
-                  */
+            if(left&&actionSquare.canMove(goaY)[0] )
+            {
+              actionSquare.left();
             }
             
-            if(left&&mushi.canMove(goaY)[0] )
+            if(right&&actionSquare.canMove(goaY)[1])
             {
-              mushi.left();
-            }
-            if(right&&mushi.canMove(goaY)[1])
-            {
-               mushi.right();
+               actionSquare.right();
             }
 
-           repaint(); //calls the paint component
-            if(mushi.collidesVictory(goaY,target))
+            repaint(); //calls the paint component
+            if(actionSquare.collidesVictory(goaY,target))
             {
             System.out.println("Mushi collided withh target");
+            
+            //Initiate J option pane
             JOptionPane.showMessageDialog(null, "Congradulations, you've won!", "Victory message", JOptionPane.PLAIN_MESSAGE);
             System.exit(1);
             }
             }
       
    }
-//}
+}
 ///////////////////////End TimeListenerB////////////////////////////////////////////////////////////////////////////////////////////////
 ///*****************************************************************PLATFORM FRAME(PAINT COMPONENT)******************************************************
       
@@ -234,57 +218,51 @@ public class PlatformPanel extends JPanel
             }
 
          target.draw(g);
-         mushi.draw(g);
-         
-         //do
-         //{
-            
-         //}while(false);              
-      }                                                                                            //paintComponent
-      //***********************************************************END  PLATFORM FRAME(PAINT COMPONENT)******************************************************
+         actionSquare.draw(g); 
+              
+      }                                                                                          //paintComponent
+  
       
-      
-      //******************************************************************PLATFORM FRAME(KEY EVENT DEMO)******************************************************
-      public class KeyEventDemo  implements KeyListener 
+  public class KeyEventDemo  implements KeyListener //The class that responds to the keys pressing needs to implement key listener and all these methods 
   {
     public void keyTyped(KeyEvent e) {}
-    public void keyReleased(KeyEvent e) 
+    public void keyReleased(KeyEvent e) //These are the events when the keys are released 
     {
       if(e.getKeyCode() == KeyEvent.VK_W)
       {
-         up=false;
+         up=false;//if the W is released then the up boolean is false 
       }
       
       if(e.getKeyCode() == KeyEvent.VK_S)
       {
-         //down=false;
+         //down=false;//down can always be false 
       }
       if(e.getKeyCode() == KeyEvent.VK_A)
       {
-         left=false;
+         left=false;//when the a key is released the left boolean value becomes false 
       }
       if(e.getKeyCode() == KeyEvent.VK_D)
       {
-         right=false;  
+         right=false;  //when that D key  is released the right Boolean  becomes false 
       }
 
     }
-    public void keyPressed(KeyEvent e) 
+    public void keyPressed(KeyEvent e) //These are the events that occur when the keys are pressed 
     {
     
       if(e.getKeyCode() == KeyEvent.VK_W)
       {
-         if(!mushi.canMove(goaY)[3])
+         if(!actionSquare.canMove(goaY)[3]) //When the W key is pressed the jump algorithm begins 
          {
-         up=true;
-         canJump = true;
-         jump=7;
-         jumpSpeed=0;
+         up=true; //The up boolean is set to true 
+         canJump = true; //The ability to jump is true 
+         jump=7; //Jump is initially set to 7 
+         jumpSpeed=0; //Jump speed is initially 0 
          }
       }
       if(e.getKeyCode() == KeyEvent.VK_S)
       {
-         //down=true;
+         //down is not needed 
       }
       if(e.getKeyCode() == KeyEvent.VK_A)
       { 
@@ -298,13 +276,13 @@ public class PlatformPanel extends JPanel
       repaint(); //calls the paint component
     }
    }                                                                                               //KEY EVENT DEMO
-//*********************************************************   END    PLATFORM FRAME(KEY EVENT DEMO)  ******************************************************    
+    
    }                                                                                               //PlatformPanel class
    
-            public static void main(String[] args)
+      public static void main(String[] args)
    {//Begin main
-      PlatformFrame pf=new PlatformFrame();
-      pf.setDefaultCloseOperation(EXIT_ON_CLOSE);  
+      PlatformFrame pf=new PlatformFrame();  //Instantiate an object of the platform frame class 
+      pf.setDefaultCloseOperation(EXIT_ON_CLOSE);  //Cause the window to close when the X is pressed 
    }//end Main 
    
      
