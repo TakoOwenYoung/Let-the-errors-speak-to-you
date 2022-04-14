@@ -3,24 +3,69 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.io.*;
 
 public class PlatformFrame extends JFrame
 {                                                                                                                        //PlatformFrame class
+int count=0;
+int gravity=0; if(c%20==0)
+        {
+            gravity++;
+            yCtr+=gravity;
+        }
+         
+         System.out.println("Gravity is "+gravity);
+      //}
+      if(gravity>7)
+      {
+         gravity=7;
+      }
+ if(c%20==0)
+        {
+            gravity++;
+            yCtr+=gravity;
+        }
+         
+         System.out.println("Gravity is "+gravity);
+      //}
+      if(gravity>7)
+      {
+         gravity=7;
+      }
+ if(c%20==0)
+        {
+            gravity++;
+            yCtr+=gravity;
+        }
+         
+         System.out.println("Gravity is "+gravity);
+      //}
+      if(gravity>7)
+      {
+         gravity=7;
+      }
 
    public static ArrayList<ArrayList<GameObject>> staticGoaY;                                                                               
    Container contents;
    PlatformPanel pp;
    Player mushi;
-   GameObject target;
+   int jump=0;
+   int grav=1;
+
+   boolean canJump=false;
+   int jumpNow;
+   VictoryBlock target;
    ArrayList<ArrayList<GameObject>> goaY=new ArrayList<ArrayList<GameObject>>();
+   
    public PlatformFrame()
    {
       super("Actraiser");
       contents=getContentPane();
       pp=new PlatformPanel();
       pp.setPreferredSize(new Dimension(800,600));
-
+      
       contents.add(pp);
       setBackground(Color.BLACK);
       setSize(800,650);
@@ -37,6 +82,7 @@ public class PlatformPanel extends JPanel
       int numRows;
       int numColumns;
       ArrayList<ArrayList<GameObject>> goaY=new ArrayList<ArrayList<GameObject>>();
+      
 
 
       public PlatformPanel()
@@ -44,28 +90,15 @@ public class PlatformPanel extends JPanel
          super();
          try
          {
-         Timer t=new Timer(10, new TimeListenerB());
-         t.start();                                                                                           //try
+         javax.swing.Timer t=new javax.swing.Timer(10, new TimeListenerB());
+                                                                                                    //try 
          Color currClr=new Color(0,0,0);
-         
          addKeyListener(new KeyEventDemo());
-         
          read=new Scanner(new File("tako.txt"));
-         
-         
-         
          startBlockX=read.nextInt();
-         // System.out.println("startBlockX= "+startBlockX);
          startBlockY=read.nextInt();
-         // System.out.println("startBlockY= "+startBlockY);
          numRows=read.nextInt();
-        //  System.out.println("numRows= "+numRows);
          numColumns=read.nextInt();
-         // System.out.println("numColumns= "+numColumns);
-         
-         mushi=new Player(startBlockX,startBlockY,new Color(0,153,0));
-         
-                  //System.out.println("\ngoaY elements from Platform Frame:");
          for(int j=0; j<numRows; j++)
          {
                ArrayList<GameObject> goaX=new ArrayList<GameObject>();
@@ -75,28 +108,30 @@ public class PlatformPanel extends JPanel
                   
                   int num=read.nextInt();
                   if(num==1)
-                  goaX.add(new GameObject((i*25),(j*25),Color.BLACK));
-                  else if(num==2)
-                 { goaX.add(new GameObject((i*25),(j*25),Color.GREEN));
-                  target =new GameObject((i*25),(j*25),Color.GREEN);
-                 }
+                  {
+                     goaX.add(new GameObject((i*25),(j*25),Color.BLACK));
+                  }
+                  else if(num==2)   
+                   { 
+                     target =new VictoryBlock((i*25),(j*25),Color.GREEN);
+                     goaX.add(target);
+                   }
+                  
                   else if(num==0)
                   goaX.add(null);
                }               
                   goaY.add(goaX);    
             }
-            System.out.println("goaY size up here: "+goaY.size());
+            
             staticGoaY=goaY;
-            for(int j=0; j<numRows; j++)
-            {
-               for(int i=0; i<numColumns; i++)
-               {
-                  //if(staticGoaY.get(i).get(j)!=null)
-                  //System.out.print(staticGoaY.get(i).get(j));
-               }
-               System.out.println();
+            mushi=new Player(startBlockX,startBlockY,new Color(0,153,0));
+            
+            t.start();
+            
+            
+            
             }
-         }                                                                                         //try
+                                                                                                  //try
          catch(IndexOutOfBoundsException ioobe)
          {
             System.out.println(ioobe.getMessage());
@@ -109,11 +144,6 @@ public class PlatformPanel extends JPanel
          {
             System.out.println("Line 105 "+npe.getMessage());
          }
-          /*catch(NoSuchElementException nse)
-         {
-            System.out.println(nse.getMessage());
-         }
-         */
 
          setBackground(Color.RED);
          setVisible(true);
@@ -130,71 +160,94 @@ public class PlatformPanel extends JPanel
    boolean down;
    boolean left;
    boolean right;
-   int grav=1;
-   double acc=0.05;
-   int  count=0;
+   
+ 
+  
+   
+     
+   
    public class TimeListenerB implements ActionListener
-   {
+   {  
+      
+            int n;
+      
+        
       public void actionPerformed(ActionEvent e)
       {  
-         count++;
-                    //System.out.println("can move down is  "+mushi.canMove(goaY)[3]);
+       count++;
+                             
 
          //try
          //{
-            if(up&&mushi.canMove(goaY)[2])
-            {  
-               mushi.up();
-               
-                  if(mushi.canMove(goaY)[3])
+            if(canJump)
+            {              
+                  if(count%10==0)
+                   {
+                     if(jump<7)
+                     jumpNow++;
+                   }
+                  for(int i=0; i<jump; i++)
                   {
-                     mushi.jump();
-                  if(count%20==0)
-                     mushi.down();
+                  if(mushi.canMove(goaY)[2])
+                     {
+                     mushi.up();
+                     jump=7-jumpNow;
+                     }
+                     else
+                     {
+                        jump=0;
+                        
+                     }
+                     if(jump==0)
+                     {canJump=false;}
                   }
+                  if(jump==0)
+                  {up=false;}
+                  
+
                      
             }
-            if(down&&mushi.canMove(goaY)[3])
+            
+            if(mushi.canMove(goaY)[3])
             {
-             mushi.down();  
+              
+            
+            
+            
+            
+            // if(count%20==0&&grav<7)
+                 //{grav+=1;}
+                 //for(int i=0; i<grav; i++)
+                  //{
+                     //if(mushi.canMove(goaY)[3])
+                     //mushi.dowwn();
+                    //mushi.down(count);
+                  //}
             }
+            
             if(left&&mushi.canMove(goaY)[0] )
             {
               mushi.left();
-              
             }
             if(right&&mushi.canMove(goaY)[1])
             {
                mushi.right();
-
             }
-            
-                                                           
-          //System.out.println("can move down is  "+mushi.canMove(goaY)[3]);
-           // while(mushi.isOnGround(goaY)==true)
-           // {
-          //  mushi.setY(mushi.getY()+1);
-           // }
-            
-            //if(mushi.canMove(goaY)[3])
-            //{
-              // int n=(mushi.getY()+grav);
-              // mushi.setY(n);
-            //}
 
            repaint(); //calls the paint component
-        // }//try end
-         //catch(NullPointerException npe)
-        // {
-            //System.out.println(npe.getMessage());
-        // }
-         
-      }
+            if(mushi.collidesVictory(goaY,target))
+            {
+            System.out.println("Mushi collided withh target");
+            JOptionPane.showMessageDialog(null, "Congradulations, you've won!", "Victory message", JOptionPane.PLAIN_MESSAGE);
+            System.exit(1);
+            }
+            }
       
    }
 //}
 ///////////////////////End TimeListenerB////////////////////////////////////////////////////////////////////////////////////////////////
 ///*****************************************************************PLATFORM FRAME(PAINT COMPONENT)******************************************************
+      
       public void paintComponent(Graphics g)
       {   
                                                                                                   //paintComponent
@@ -206,19 +259,16 @@ public class PlatformPanel extends JPanel
                {
                   if(goaY.get(i).get(j)!=null)
                   goaY.get(i).get(j).draw(g);
-                  
                }
             }
 
-
+         target.draw(g);
          mushi.draw(g);
-         if(mushi.collides(target))
-         {
-            System.out.println("Mushi collided withh target");
-         }
          
-         
-         //System.out.println("Mushi (Left side, Right side)=("+mushi.getLeft()+", "+mushi.getRight()+")");                 
+         //do
+         //{
+            
+         //}while(false);              
       }                                                                                            //paintComponent
       //***********************************************************END  PLATFORM FRAME(PAINT COMPONENT)******************************************************
       
@@ -236,7 +286,7 @@ public class PlatformPanel extends JPanel
       
       if(e.getKeyCode() == KeyEvent.VK_S)
       {
-         down=false;
+         //down=false;
       }
       if(e.getKeyCode() == KeyEvent.VK_A)
       {
@@ -253,11 +303,17 @@ public class PlatformPanel extends JPanel
     
       if(e.getKeyCode() == KeyEvent.VK_W)
       {
+         if(!mushi.canMove(goaY)[3])
+         {
          up=true;
+         canJump = true;
+         jump=7;
+         jumpNow=0;
+         }
       }
       if(e.getKeyCode() == KeyEvent.VK_S)
       {
-         down=true;
+         //down=true;
       }
       if(e.getKeyCode() == KeyEvent.VK_A)
       { 
@@ -271,91 +327,14 @@ public class PlatformPanel extends JPanel
       repaint(); //calls the paint component
     }
    }                                                                                               //KEY EVENT DEMO
-//*********************************************************   END    PLATFORM FRAME(KEY EVENT DEMO)  ******************************************************
-       
-
-        
+//*********************************************************   END    PLATFORM FRAME(KEY EVENT DEMO)  ******************************************************    
    }                                                                                               //PlatformPanel class
    
             public static void main(String[] args)
    {//Begin main
       PlatformFrame pf=new PlatformFrame();
-      pf.setDefaultCloseOperation(EXIT_ON_CLOSE);
-     /* 
-            java.util.Timer time;
-      time=new java.util.Timer();
-      
-         TimerTask task=new TimerTask() {
-         @Override
-         public void run() {
-
-            if(pf.mushi.isOnGround(staticGoaY)==false)
-            {
-               int n=(pf.mushi.getY()+grav);
-               pf.mushi.setY(n);
-            }
-            if(pf.mushi.isOnGround(staticGoaY)==true)
-            {grav=1;}
-            pf.repaint();
-            }
-               
-               
-            };
-         
-
-              
-         TimerTask task2=new TimerTask() {
-         @Override
-         public void run() {
-            while(grav<=7&&pf.mushi.isOnGround(staticGoaY))
-            {
-               //grav+=acc;
-            }
-               if(pf.mushi.isOnGround(staticGoaY)==true)
-               //{grav=1;}
-            }
-               
-               
-            };
-         
-     
-     time.scheduleAtFixedRate(task, 0, 10);
-         time.scheduleAtFixedRate(task2, 10, 10);
-         
-
-    
-     TimerTask task3=new TimerTask() {
-         @Override
-         public void run() {
-            System.out.println("Mushi canMove= "+mushi.canMove(staticGoaY));  //REMEMBER STATICGOAY AND GOAY
-            }
-               
-               
-            };
-
-          time.scheduleAtFixedRate(task3, 0, 1000);
-      */
-     }//end Main 
+      pf.setDefaultCloseOperation(EXIT_ON_CLOSE);  
+   }//end Main 
    
      
 }                                                                                                  //PlatformFrame class
-
-
-
-
-
-
-
-
-
-         /*if(tako.collides(mushi))
-         {
-         System.out.println("Collides");
-         }
-         tako.draw(g);
-         System.out.println("startBlockX ="+startBlockX);
-         System.out.println("startBlockY ="+startBlockY);
-         System.out.println("Mushi color ="+mushi.getColor());
-         System.out.println("Mushi x ="+mushi.getX());
-         System.out.println("Mushi y ="+mushi.getY());
-         */

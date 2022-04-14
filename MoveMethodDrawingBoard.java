@@ -97,6 +97,79 @@ if(this.getLeft()==current.getRight() &&
 
 
 
+
+
+
+
+
+         /*if(tako.collides(mushi))
+         {
+         System.out.println("Collides");
+         }
+         tako.draw(g);
+         System.out.println("startBlockX ="+startBlockX);
+         System.out.println("startBlockY ="+startBlockY);
+         System.out.println("Mushi color ="+mushi.getColor());
+         System.out.println("Mushi x ="+mushi.getX());
+         System.out.println("Mushi y ="+mushi.getY());
+       
+         
+         java.util.Timer time;
+      time=new java.util.Timer();
+      
+         TimerTask task=new TimerTask() {
+         @Override
+         public void run() {
+
+            if(pf.mushi.isOnGround(staticGoaY)==false)
+            {
+               int n=(pf.mushi.getY()+pf.pp.getGrav());
+               pf.mushi.setY(n);
+            }
+            if(pf.mushi.isOnGround(staticGoaY)==true)
+            {pf.pp.setGrav(1);}
+            pf.repaint();
+            }
+               
+               
+            };
+         
+
+         /* 
+         TimerTask task2=new TimerTask() {
+         @Override
+         public void run() {
+            while(grav<=7&&pf.mushi.isOnGround(staticGoaY))
+            {
+               //grav+=acc;
+            }
+               if(pf.mushi.isOnGround(staticGoaY)==true)
+               //{grav=1;}
+            }
+               
+               
+            };
+         
+     
+     time.scheduleAtFixedRate(task, 0, 10);
+         time.scheduleAtFixedRate(task2, 10, 10);
+         
+
+    
+     TimerTask task3=new TimerTask() {
+         @Override
+         public void run() {
+            System.out.println("Mushi canMove= "+mushi.canMove(staticGoaY));  //REMEMBER STATICGOAY AND GOAY
+            }
+               
+               
+            };
+
+          time.scheduleAtFixedRate(task3, 0, 1000);
+      */  /* */
+
+
+
    
       
       
